@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -20,7 +21,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  const user = useSelector((state) => state.auth.user); 
+  const user = useSelector((state) => state.auth.user);
+
   const handlePriceChange = (e) => {
     const value = e.target.value;
     if (value === "") {
@@ -36,9 +38,7 @@ const Navbar = () => {
   const handleCart = () => {
     if (!user) {
       toast.error("You must be signed in to view your cart.");
-      setTimeout(() => {
-        navigate("/signin");
-      }, 1500);
+      setTimeout(() => navigate("/signin"), 1500);
     } else {
       navigate("/cart");
     }
@@ -71,9 +71,9 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg minimal-navbar shadow-sm py-2 px-3">
-      <div className="container-fluid">
-        <a className="navbar-brand fw-bold minimal-navbar-brand" href="/">
+    <nav className="navbar navbar-expand-lg minimal-navbar shadow-sm py-2">
+      <div className="container-fluid align-items-center">
+        <a className="navbar-brand fw-bold minimal-navbar-brand me-4" href="/">
           <img src={logo} alt="logo" style={{ height: "40px" }} />
         </a>
 
@@ -82,45 +82,55 @@ const Navbar = () => {
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarContent"
-          aria-controls="navbarContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
         <div className="collapse navbar-collapse" id="navbarContent">
-          <div className="w-100 mt-3 mt-lg-0 mx-lg-3 position-relative" style={{ maxWidth: "600px" }}>
-            <input
-              type="text"
-              className="form-control minimal-search-input ps-5"
-              placeholder="Search for products and categories"
-              onChange={handleSearch}
-            />
-            <FaSearch className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" />
-          </div>
+          <div className="row w-100 g-2 align-items-center justify-content-end">
 
-          <ul className="navbar-nav ms-auto mt-3 mt-lg-0 d-flex align-items-center gap-3">
-            <li className="nav-item">
-              <button className="btn minimal-btn w-100" onClick={handleAddProduct} title="Add Product">
-                <FaPlus />
-              </button>
-            </li>
+            <div className="col-xl-4 col-lg-4 col-md-6 col-12">
+              <div className="position-relative">
+                <input
+                  type="text"
+                  className="form-control minimal-search-input ps-5"
+                  placeholder="Search for products"
+                  onChange={handleSearch}
+                />
+                <FaSearch className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" />
+              </div>
+            </div>
 
-            <li className="nav-item d-flex align-items-center">
+            <div className="col-md-3 col-lg-2 d-flex align-items-center">
               <FaFilter className="me-2 text-muted" />
               <select className="form-select minimal-select" onChange={handlePriceChange}>
-                <option value="">All Prices</option>
+                <option value="">All</option>
                 <option value="0-500">Under ₹500</option>
                 <option value="500-1000">₹500 - ₹1000</option>
                 <option value="1000-1500">₹1000 - ₹1500</option>
                 <option value="1500-2000">₹1500 - ₹2000</option>
                 <option value="2000+">Above ₹2000</option>
               </select>
-            </li>
+            </div>
 
-            <li className="nav-item">
-              <div className="position-relative minimal-cart" onClick={handleCart} style={{ cursor: "pointer" }}>
+            {user?.role=== "admin" && (
+              <div className="col-auto">
+                <button
+                  className="btn minimal-btn px-3 py-2"
+                  onClick={handleAddProduct}
+                  title="Add Product"
+                >
+                  <FaPlus /> Add Product
+                </button>
+              </div>
+            )}
+
+            <div className="col-auto">
+              <div
+                className="position-relative minimal-cart px-3 py-2"
+                onClick={handleCart}
+                style={{ cursor: "pointer" }}
+              >
                 <FaShoppingCart className="fs-5 me-1" />
                 <span className="d-none d-lg-inline">Cart</span>
                 {cart.length > 0 && (
@@ -129,35 +139,44 @@ const Navbar = () => {
                   </span>
                 )}
               </div>
-            </li>
+            </div>
 
-            <li className="nav-item dropdown">
-              {user ? (
-                <>
+            <div className="col-auto">
+              <div className="dropdown">
+                {user ? (
+                  <>
+                    <button
+                      className="btn minimal-btn dropdown-toggle px-3 py-2 d-flex align-items-center"
+                      data-bs-toggle="dropdown"
+                      type="button"
+                    >
+                      <FaUserCircle className="me-1" />
+                      <span className="d-none d-lg-inline">{user.email.split("@")[0]}</span>
+                    </button>
+                    <ul className="dropdown-menu dropdown-menu-end">
+                      <li><button className="dropdown-item" onClick={() => navigate("/profile")}>Profile</button></li>
+                      <li><button className="dropdown-item" onClick={() => navigate("/orders")}>Orders</button></li>
+                      <li><button className="dropdown-item" onClick={() => navigate("/coupons")}>Coupons</button></li>
+                      <li><hr className="dropdown-divider" /></li>
+                      <li>
+                        <button className="dropdown-item text-danger" onClick={handleLogout}>
+                          <FaSignOutAlt /> Sign Out
+                        </button>
+                      </li>
+                    </ul>
+                  </>
+                ) : (
                   <button
-                    className="btn minimal-btn dropdown-toggle d-flex align-items-center"
-                    data-bs-toggle="dropdown"
+                    className="btn minimal-btn px-3 py-2"
+                    onClick={() => navigate("/signin")}
                   >
-                    <FaUserCircle className="me-1" />
-                    <span className="d-none d-lg-inline">{user.email.split("@")[0]}</span>
+                    Sign In
                   </button>
-                  <ul className="dropdown-menu dropdown-menu-end">
-                    <li><button className="dropdown-item" onClick={() => navigate("/profile")}>Profile</button></li>
-                    <li><button className="dropdown-item" onClick={() => navigate("/orders")}>Orders</button></li>
-                    <li><button className="dropdown-item" onClick={() => navigate("/coupons")}>Coupons</button></li>
-                    <li><hr className="dropdown-divider" /></li>
-                    <li>
-                      <button className="dropdown-item text-danger" onClick={handleLogout}>
-                        <FaSignOutAlt /> Sign Out
-                      </button>
-                    </li>
-                  </ul>
-                </>
-              ) : (
-                <button className="btn minimal-btn" onClick={() => navigate("/signin")}>Sign In</button>
-              )}
-            </li>
-          </ul>
+                )}
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </nav>

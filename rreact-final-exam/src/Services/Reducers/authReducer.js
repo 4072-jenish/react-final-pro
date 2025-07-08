@@ -1,7 +1,5 @@
-const storedUser = JSON.parse(sessionStorage.getItem("user"));
-
 const initialState = {
-  user: storedUser || null,
+  user: null,
   error: null,
 };
 
@@ -9,11 +7,9 @@ const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case "LOGIN":
     case "REGISTER_SUCCESS":
-      sessionStorage.setItem("user", JSON.stringify(action.payload));
       return { ...state, user: action.payload, error: null };
 
-    case "LOGOUT_SUCCESS": 
-      sessionStorage.removeItem("user");
+    case "LOGOUT_SUCCESS":
       return { ...state, user: null, error: null };
 
     case "AUTH_ERROR":

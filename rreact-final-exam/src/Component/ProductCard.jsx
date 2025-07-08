@@ -72,25 +72,15 @@ const ProductCard = ({ product }) => {
               <FaCartPlus />
             </button>
 
-            {user ? (
-              <Link
-                to={`/edit/${product.id}`}
-                className="btn minimal-btn"
-                title="Edit"
-              >
-                <RiEdit2Line />
-              </Link>
-            ) : (
-              <button
-                className="btn minimal-btn"
-                onClick={() => {
-                  alert("Please sign in to edit product.");
-                  navigate("/signin");
-                }}
-              >
-                <RiEdit2Line />
-              </button>
-            )}
+     {user?.role === "admin" && (
+  <Link
+    to={`/edit/${product.id}`}
+    className="btn minimal-btn"
+    title="Edit"
+  >
+    <RiEdit2Line />
+  </Link>
+)}
 
             {user ? (
               <button

@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { auth, googleProvider } from "../../firebase";
 import { useNavigate, Link } from "react-router-dom";
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
-import { loginAsync } from "../Services/Actions/authActions";
-import { FaGoogle, FaFacebookF } from "react-icons/fa";
+import { loginAsync, loginWithGoogle } from "../Services/Actions/authActions";
+import { FaGoogle } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
+import { db } from "../../firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -13,11 +15,15 @@ const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+  dispatch(loginAsync(email, password));
+}, []);
+
+
   const handleEmailLogin = async (e) => {
     e.preventDefault();
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      dispatch(loginAsync(userCredential.user));
+     dispatch(loginAsync(email, password)); 
       toast.success("SIGN IN SUCCESSFULLY ");
       setTimeout(() => {
        navigate("/");
@@ -27,19 +33,32 @@ const SignIn = () => {
     }
   };
 
-  const handleGoogle = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      dispatch(loginAsync(result.user));
-      toast.success("SIGN IN SUCCESSFULLY ");
-     setTimeout(() => {
-      navigate("/");
-     },3000)
-    } catch (err) {
-      toast.error(`SIGN IN FAILED ${err.message}`);
+const handleGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
 
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+
+    if (!snap.exists()) {
+      await setDoc(userRef, {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName || user.email.split("@")[0],
+        photoURL: user.photoURL || "",
+        role: "user",
+      });
     }
-  };
+
+    const userData = (await getDoc(userRef)).data();
+    dispatch({ type: "LOGIN", payload: userData });
+    navigate("/");
+
+  } catch (err) {
+    console.error("❌ Google login error:", err.message);
+  }
+};
 
   return (
     <div className="container mt-5 d-flex justify-content-center align-items-center">

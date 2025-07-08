@@ -27,6 +27,7 @@ export const addProductAsync = (product) => async (dispatch) => {
     dispatch(fetchProductsAsync());
   } catch (error) {
     console.error("Error adding product:", error);
+   toast.error("❌ Failed to add product");
   }
 };
 
