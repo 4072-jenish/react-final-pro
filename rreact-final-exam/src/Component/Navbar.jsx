@@ -97,7 +97,6 @@ const Navbar = () => {
                   placeholder="Search for products"
                   onChange={handleSearch}
                 />
-                <FaSearch className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" />
               </div>
             </div>
 

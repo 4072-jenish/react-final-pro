@@ -73,24 +73,24 @@ const ProductCard = ({ product }) => {
             </button>
 
             {user?.role === "admin" && (
-              <Link
-                to={`/edit/${product.id}`}
-                className="btn minimal-btn"
-                title="Edit"
-              >
-                <RiEdit2Line />
-              </Link>
-            )}
+    <>
+      <Link
+        to={`/edit/${product.id}`}
+        className="btn minimal-btn"
+        title="Edit"
+      >
+        <RiEdit2Line />
+      </Link>
 
-            {user?.role === "admin" && (
-              <Link
-                to={`/edit/${product.id}`}
-                className="btn minimal-btn"
-                title="Edit"
-              >
-                <FaTrash />
-              </Link>
-            )}
+      <button
+        className="btn minimal-btn"
+        onClick={handleDelete}
+        title="Delete"
+      >
+        <FaTrash />
+      </button>
+    </>
+  )}
           </div>
         </div>
       </div>
