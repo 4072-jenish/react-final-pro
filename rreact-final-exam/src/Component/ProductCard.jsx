@@ -72,34 +72,24 @@ const ProductCard = ({ product }) => {
               <FaCartPlus />
             </button>
 
-     {user?.role === "admin" && (
-  <Link
-    to={`/edit/${product.id}`}
-    className="btn minimal-btn"
-    title="Edit"
-  >
-    <RiEdit2Line />
-  </Link>
-)}
+            {user?.role === "admin" && (
+              <Link
+                to={`/edit/${product.id}`}
+                className="btn minimal-btn"
+                title="Edit"
+              >
+                <RiEdit2Line />
+              </Link>
+            )}
 
-            {user ? (
-              <button
+            {user?.role === "admin" && (
+              <Link
+                to={`/edit/${product.id}`}
                 className="btn minimal-btn"
-                onClick={handleDelete}
-                title="Delete"
+                title="Edit"
               >
                 <FaTrash />
-              </button>
-            ) : (
-              <button
-                className="btn minimal-btn"
-                onClick={() => {
-                  alert("Please sign in to delete product.");
-                  navigate("/signin");
-                }}
-              >
-                <FaTrash />
-              </button>
+              </Link>
             )}
           </div>
         </div>
