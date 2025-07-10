@@ -7,6 +7,9 @@ import { deleteProductAsync } from "../Services/Actions/productActions";
 import { Link, useNavigate } from "react-router-dom";
 import "./common.css";
 import { ToastContainer, toast } from 'react-toastify';
+import '@material/web/button/filled-button.js';
+import '@material/web/button/outlined-button.js';
+import '@material/web/checkbox/checkbox.js';
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -58,32 +61,32 @@ const ProductCard = ({ product }) => {
           <div className="mt-auto pt-3 d-flex justify-content-between">
             <Link
               to={`/product/${product.id}`}
-              className="btn minimal-btn"
+              className="btn bg-color-2"
               title="View"
             >
+
               <FaEye />
             </Link>
 
             <button
-              className="btn minimal-btn"
+              className="btn bg-color-2"
               onClick={handleAddToCart}
               title="Add to Cart"
             >
-              <FaCartPlus />
+              <FaCartPlus/>
             </button>
 
             {user?.role === "admin" && (
     <>
       <Link
         to={`/edit/${product.id}`}
-        className="btn minimal-btn"
-        title="Edit"
-      >
+        className="btn bg-color-2"
+        title="Edit">
         <RiEdit2Line />
       </Link>
 
       <button
-        className="btn minimal-btn"
+        className="btn bg-color-2"
         onClick={handleDelete}
         title="Delete"
       >

@@ -16,6 +16,9 @@ import { auth } from "../../firebase";
 import { logoutAsync } from "../Services/Actions/authActions";
 import { toast } from "react-toastify";
 import logo from "../assets/logo.png";
+import '@material/web/button/filled-button.js';
+import '@material/web/button/outlined-button.js';
+import '@material/web/checkbox/checkbox.js';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -74,7 +77,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg minimal-navbar shadow-sm py-2">
       <div className="container-fluid align-items-center">
         <a className="navbar-brand fw-bold minimal-navbar-brand me-4" href="/">
-          <img src={logo} alt="logo" style={{ height: "40px" }} />
+             <h4 className="color-text-1">Click & <br /> Collect</h4>
         </a>
 
         <button
@@ -111,27 +114,14 @@ const Navbar = () => {
                 <option value="2000+">Above ₹2000</option>
               </select>
             </div>
-
-            {user?.role=== "admin" && (
-              <div className="col-auto">
-                <button
-                  className="btn minimal-btn px-3 py-2"
-                  onClick={handleAddProduct}
-                  title="Add Product"
-                >
-                  <FaPlus /> Add Product
-                </button>
-              </div>
-            )}
-
             <div className="col-auto">
               <div
-                className="position-relative minimal-cart px-3 py-2"
+                className="position-relative px-3 py-2 "
                 onClick={handleCart}
                 style={{ cursor: "pointer" }}
               >
-                <FaShoppingCart className="fs-5 me-1" />
-                <span className="d-none d-lg-inline">Cart</span>
+                <FaShoppingCart className="fs-5 me-1 color-text-1" />
+                <span className="d-none d-lg-inline color-text-1">Cart</span>
                 {cart.length > 0 && (
                   <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     {cart.length}

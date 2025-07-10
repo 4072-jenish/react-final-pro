@@ -6,19 +6,17 @@ import Navbar from "./Component/Navbar";
 import ProductGrid from "./Component/productGrid";
 import AddProduct from "./Component/AddProduct";
 import Cart from "./Component/Cart";
-import Carousel from "./Component/Carousel";
 import EditProduct from "./Component/EditProduct";
 import ProductDetails from "./Component/ProductDetails";
-import Cursor from "./Component/Cursor/Cursor";
 import SignUp from "./Component/SignUp";
 import SignIn from "./Component/SignIn";
 import Profile from "./Component/Profile";
 import Orders from "./Component/Orders";
 import Coupons from "./Component/Coupons";
-
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db, auth } from "../firebase";
+import "../src/Component/common.css"
 
 const MainApp = () => {
   const dispatch = useDispatch();
@@ -33,7 +31,6 @@ const MainApp = () => {
         const userSnap = await getDoc(userRef);
 
         if (!userSnap.exists()) {
-          // If new email/password user, create their Firestore doc
           const userData = {
             uid: firebaseUser.uid,
             email: firebaseUser.email,
@@ -57,12 +54,12 @@ const MainApp = () => {
 
   return (
     <>
-      <div className="text-end px-4 fw-semibold text-muted small">
+      <div className="text-end px-4 fw-semibold text-muted small total-bg">
         {user ? `✅ Welcome, ${user.email}` : `🚫 Not signed in`}
       </div>
       <Navbar />
-
-      <Routes>
+          <div className="total-bg">
+          <Routes>
         <Route path="/" element={<ProductGrid />} />
         <Route path="/add-product" element={<AddProduct />} />
         <Route path="/cart" element={<Cart />} />
@@ -74,6 +71,8 @@ const MainApp = () => {
         <Route path="/orders" element={<Orders />} />
         <Route path="/coupons" element={<Coupons />} />
       </Routes>
+    
+          </div>
     </>
   );
 };
